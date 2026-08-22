@@ -1,7 +1,7 @@
 {
   "name": "GPS Pro - Precisão Total",
   "short_name": "GPS Pro",
-  "description": "Navegação GPS de alta precisão com mapas, rotas, favoritos e velocidade.",
+  "description": "Navegação GPS de alta precisão",
   "start_url": "/index.html",
   "display": "standalone",
   "orientation": "portrait",
