@@ -1,24 +1,43 @@
 {
   "name": "GPS Pro - Precisão Total",
   "short_name": "GPS Pro",
-  "description": "Navegação GPS de alta precisão com mapas, rotas, favoritos e velocidade.",
-  "start_url": "/index.html",
+  "description": "GPS, velocímetro, hodômetro, navegação, trajetórias e favoritos.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "id": "./",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#f0f2f5",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
+  "orientation": "any",
   "theme_color": "#2563eb",
+  "background_color": "#f0f2f5",
+  "categories": [
+    "navigation",
+    "utilities"
+  ],
+  "prefer_related_applications": false,
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "./icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "icon-512.png",
+      "src": "./icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
