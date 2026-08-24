@@ -266,20 +266,20 @@
             text-align: center;
             border: 2px solid var(--bg-card);
         }
-        .btn-icon.save-mode {
+        .btn-icon.destination-mode {
             background: #22c55e;
             color: white;
             font-size: 1.2rem;
         }
-        .btn-icon.save-mode:hover {
+        .btn-icon.destination-mode:hover {
             background: #16a34a;
         }
-        .btn-icon.save-mode.active {
+        .btn-icon.destination-mode.active {
             background: var(--danger);
             color: white;
             animation: pulse 0.8s infinite;
         }
-        .btn-icon.save-mode.active:hover {
+        .btn-icon.destination-mode.active:hover {
             background: #dc2626;
         }
         @keyframes pulse {
@@ -1462,8 +1462,8 @@
             border: 1px solid var(--danger);
             display: none;
         }
-        /* Tooltip para modo salvar */
-        .save-mode-tooltip {
+        /* Tooltip para modo destino */
+        .destination-tooltip {
             position: absolute;
             bottom: 80px;
             left: 50%;
@@ -1481,7 +1481,7 @@
             white-space: nowrap;
             pointer-events: none;
         }
-        .save-mode-tooltip.show {
+        .destination-tooltip.show {
             display: block;
         }
         @media (max-width: 768px) {
@@ -1705,8 +1705,9 @@
                         <button class="transport-btn" data-mode="driving" title="Trem"><i class="fas fa-train"></i></button>
                         <button class="transport-btn" data-mode="driving" title="Moto"><i class="fas fa-motorcycle"></i></button>
                     </div>
-                    <button class="btn-icon save-mode" id="save-mode-btn" title="Ativar modo salvar local">
-                        <i class="fas fa-map-pin"></i>
+                    <!-- Botão modo destino (substitui o antigo save-mode) -->
+                    <button class="btn-icon destination-mode" id="destination-btn" title="Definir destino clicando no mapa">
+                        <i class="fas fa-flag-checkered"></i>
                     </button>
                     <button class="btn-icon star" id="favorite-center-btn" title="Meus favoritos">
                         <i class="fas fa-star"></i>
@@ -1775,9 +1776,9 @@
                     <button class="btn-reset-parcial" id="reset-parcial-btn"><i class="fas fa-undo"></i> Reset Parcial</button>
                 </div>
             </div>
-            <!-- Tooltip modo salvar -->
-            <div id="save-mode-tooltip" class="save-mode-tooltip">
-                <i class="fas fa-map-pin" style="color:var(--success);"></i> Clique no mapa para salvar local
+            <!-- Tooltip modo destino -->
+            <div id="destination-tooltip" class="destination-tooltip">
+                <i class="fas fa-flag-checkered" style="color:var(--success);"></i> Clique no mapa para definir destino
             </div>
             <button id="navigate-btn" title="Iniciar navegação para o destino" disabled>
                 <i class="fas fa-play"></i>
@@ -2095,7 +2096,7 @@
             let lastTrackPoint = null; // {lat, lng, timestamp}
             let trackIntervalSec = 2; // default
             let trackDistanceM = 5; // default
-            let trackDataModified = false; // flag para avisar se não salvou
+            let trackDataModified = false;
 
             // Velocímetro
             let currentSpeed = 0;
@@ -2107,8 +2108,8 @@
             // ===== WAKE LOCK =====
             let wakeLockSentinel = null;
 
-            // ======================== VARIÁVEIS MODO SALVAR ========================
-            let saveModeActive = false;
+            // ======================== VARIÁVEIS MODO DESTINO ========================
+            let destinationMode = false;
 
             // ======================== VARIÁVEIS MODAL SALVAR FAVORITO ========================
             let pendingSaveCoords = null;
@@ -2127,9 +2128,9 @@
                 title: 'Buscar Endereços',
                 description: 'Digite um endereço, ponto de interesse ou coordenadas na barra de pesquisa. Sugestões aparecerão automaticamente enquanto você digita.'
             }, {
-                icon: 'fa-map-pin',
-                title: 'Salvar Locais',
-                description: 'Clique no alfinete verde 🟢 (modo salvar), depois clique no mapa. O modal de salvamento aparecerá para você nomear e guardar o local.'
+                icon: 'fa-flag-checkered',
+                title: 'Definir Destino',
+                description: 'Clique no botão 🏁 "Definir destino" e depois clique em qualquer ponto do mapa. O destino será marcado e a rota será traçada automaticamente.'
             }, {
                 icon: 'fa-star',
                 title: 'Favoritos',
@@ -2137,7 +2138,7 @@
             }, {
                 icon: 'fa-play',
                 title: 'Navegação',
-                description: 'Defina um destino (pesquisando ou clicando em um favorito) e clique no botão ▶️ (play) para traçar a rota. O mapa ajustará o zoom para mostrar o caminho.'
+                description: 'Defina um destino e clique no botão ▶️ (play) para traçar a rota. O mapa ajustará o zoom para mostrar o caminho.'
             }, {
                 icon: 'fa-wifi-slash',
                 title: 'Modo Off-line',
@@ -2207,8 +2208,8 @@
             const themeToggle = document.getElementById('theme-toggle');
             const clearTrackBtn = document.getElementById('clear-track-btn');
             const saveTrackBtn = document.getElementById('save-track-btn');
-            const saveModeBtn = document.getElementById('save-mode-btn');
-            const saveModeTooltip = document.getElementById('save-mode-tooltip');
+            const destinationBtn = document.getElementById('destination-btn');
+            const destinationTooltip = document.getElementById('destination-tooltip');
             const helpBtn = document.getElementById('help-btn');
             const helpModal = document.getElementById('help-modal');
             const closeHelpBtn = document.getElementById('close-help-btn');
@@ -2978,7 +2979,7 @@
                 const timestamp = now.toISOString();
                 trackData.push({ lat, lng, timestamp, altitude: altitude || null });
                 lastTrackPoint = { lat, lng, timestamp: Date.now() };
-                trackDataModified = true; // marca que houve alteração
+                trackDataModified = true;
 
                 if (trackLine) {
                     map.removeLayer(trackLine);
@@ -2995,7 +2996,7 @@
                 }
             }
 
-            // ===== LIMPAR TRAJETÓRIA (com pergunta) =====
+            // ===== LIMPAR TRAJETÓRIA =====
             function doClearTrack() {
                 trackData = [];
                 lastTrackPoint = null;
@@ -3009,7 +3010,6 @@
             function clearTrack() {
                 if (trackDataModified && trackData.length > 0) {
                     if (confirm('Há dados de trajetória não salvos. Deseja salvar antes de limpar?')) {
-                        // Salva e depois limpa
                         exportTrackGPX().then(() => {
                             doClearTrack();
                         }).catch(() => {
@@ -3021,7 +3021,7 @@
                 doClearTrack();
             }
 
-            // ======================== EXPORTAR TRACKLOG (GPX) com escolha de pasta ========================
+            // ======================== EXPORTAR TRACKLOG (GPX) ========================
             async function exportTrackGPX() {
                 if (trackData.length < 2) {
                     alert('Trajetória muito curta para exportar (necessário pelo menos 2 pontos).');
@@ -3055,7 +3055,6 @@
           </trk>
         </gpx>`;
 
-                // Tenta usar File System Access API (escolher pasta)
                 if ('showDirectoryPicker' in window) {
                     try {
                         const dirHandle = await window.showDirectoryPicker();
@@ -3067,12 +3066,10 @@
                         trackDataModified = false;
                         return;
                     } catch (err) {
-                        // Usuário cancelou ou erro – continua para download tradicional
                         console.warn('Falha ao salvar com File System API, usando download:', err);
                     }
                 }
 
-                // Fallback: download tradicional
                 const blob = new Blob([gpx], { type: 'application/gpx+xml' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -3144,7 +3141,7 @@
                 shareCoords = { lat, lng };
                 shareCoordsDisplay.textContent = `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`;
                 shareModal.style.display = 'flex';
-                if (saveModeActive) toggleSaveMode(false);
+                if (destinationMode) toggleDestinationMode(false);
             }
 
             function closeShareModalFn() {
@@ -3176,7 +3173,7 @@
 
             function startHold(e) {
                 if (e.originalEvent.target.closest('.leaflet-marker-icon')) return;
-                if (saveModeActive) return;
+                if (destinationMode) return; // modo destino tem prioridade
 
                 const latlng = e.latlng;
                 holdCoords = latlng;
@@ -3198,6 +3195,42 @@
             map.on('pointerdown', startHold);
             map.on('pointerup', cancelHold);
             map.on('pointercancel', cancelHold);
+
+            // ======================== MODO DESTINO (CLIQUE NO MAPA) ========================
+            function toggleDestinationMode(activate) {
+                destinationMode = activate;
+                if (activate) {
+                    destinationBtn.classList.add('active');
+                    destinationTooltip.classList.add('show');
+                    destinationBtn.innerHTML = '<i class="fas fa-flag-checkered"></i>';
+                    destinationBtn.title = 'Desativar modo destino';
+                } else {
+                    destinationBtn.classList.remove('active');
+                    destinationTooltip.classList.remove('show');
+                    destinationBtn.innerHTML = '<i class="fas fa-flag-checkered"></i>';
+                    destinationBtn.title = 'Definir destino clicando no mapa';
+                }
+            }
+
+            destinationBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleDestinationMode(!destinationMode);
+            });
+
+            // Clique no mapa para definir destino (quando modo ativo)
+            map.on('click', function(e) {
+                if (!destinationMode) return;
+                const latlng = e.latlng;
+                // Tenta obter nome via reverse geocode
+                reverseGeocode(latlng.lat, latlng.lng).then(name => {
+                    const destName = name || 'Destino';
+                    goToDestination(destName, latlng.lat, latlng.lng);
+                    toggleDestinationMode(false);
+                }).catch(() => {
+                    goToDestination('Destino', latlng.lat, latlng.lng);
+                    toggleDestinationMode(false);
+                });
+            });
 
             // ======================== MODO OFF-LINE ========================
             function setOfflineMode(enable) {
@@ -3469,9 +3502,7 @@
                     item.addEventListener('click', () => {
                         document.getElementById('search-input').value = r.display_name;
                         div.classList.remove('show');
-                        openSaveModal(r.lat, r.lon, r.display_name, function() {
-                            goToDestination(r.display_name, r.lat, r.lon);
-                        });
+                        goToDestination(r.display_name, r.lat, r.lon);
                     });
                     div.appendChild(item);
                 });
@@ -3630,6 +3661,7 @@
                         console.warn('⚠️ Erro no GPS:', err.message);
                         updateGpsStatus('error');
                         gpsErrorMsg.textContent = err.message || 'Erro de GPS';
+                        // Fallback
                         navigator.geolocation.getCurrentPosition(
                             (pos) => {
                                 console.log('✅ Fallback position:', pos.coords);
@@ -3649,7 +3681,9 @@
                             },
                             (fallbackErr) => {
                                 console.error('❌ Fallback também falhou:', fallbackErr.message);
-                                gpsErrorMsg.textContent = 'Permissão negada ou GPS desativado';
+                                gpsErrorMsg.textContent = 'Permissão de localização negada. Ative o GPS no navegador.';
+                                gpsErrorMsg.style.display = 'inline-block';
+                                updateGpsStatus('error');
                             },
                             { enableHighAccuracy: true, timeout: 5000 }
                         );
@@ -3952,8 +3986,8 @@
                 saveFavName.value = suggestedName || '';
                 saveFavCoordsDisplay.textContent = `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`;
                 saveFavModal.style.display = 'flex';
-                if (saveModeActive) {
-                    toggleSaveMode(false);
+                if (destinationMode) {
+                    toggleDestinationMode(false);
                 }
                 setTimeout(() => {
                     saveFavName.focus();
@@ -3991,33 +4025,6 @@
                     saveFavConfirm.click();
                 } else if (e.key === 'Escape') {
                     closeSaveModal();
-                }
-            });
-
-            // ======================== MODO SALVAR ========================
-            function toggleSaveMode(activate) {
-                saveModeActive = activate;
-                if (activate) {
-                    saveModeBtn.classList.add('active');
-                    saveModeTooltip.classList.add('show');
-                    saveModeBtn.innerHTML = '<i class="fas fa-map-pin"></i>';
-                    saveModeBtn.title = 'Desativar modo salvar';
-                } else {
-                    saveModeBtn.classList.remove('active');
-                    saveModeTooltip.classList.remove('show');
-                    saveModeBtn.innerHTML = '<i class="fas fa-map-pin"></i>';
-                    saveModeBtn.title = 'Ativar modo salvar local';
-                }
-            }
-
-            saveModeBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                toggleSaveMode(!saveModeActive);
-            });
-
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && saveModeActive) {
-                    toggleSaveMode(false);
                 }
             });
 
@@ -4447,7 +4454,7 @@
                     locateBtn.style.color = '';
                 }
                 transportDropdown.classList.remove('open');
-                if (saveModeActive) toggleSaveMode(false);
+                if (destinationMode) toggleDestinationMode(false);
             });
 
             // ======================== COMPARTILHAR LOCALIZAÇÃO ATUAL ========================
@@ -4458,21 +4465,21 @@
                 } else {
                     alert('Ative o GPS primeiro para compartilhar sua localização.');
                 }
-                if (saveModeActive) toggleSaveMode(false);
+                if (destinationMode) toggleDestinationMode(false);
             });
 
             // ======================== SALVAR TRACKLOG ========================
             saveTrackBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 exportTrackGPX();
-                if (saveModeActive) toggleSaveMode(false);
+                if (destinationMode) toggleDestinationMode(false);
             });
 
             // ======================== EVENT LISTENERS ========================
             transportToggleBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 transportDropdown.classList.toggle('open');
-                if (saveModeActive) toggleSaveMode(false);
+                if (destinationMode) toggleDestinationMode(false);
             });
 
             document.addEventListener('click', function(e) {
@@ -4499,7 +4506,7 @@
                     }
 
                     transportDropdown.classList.remove('open');
-                    if (saveModeActive) toggleSaveMode(false);
+                    if (destinationMode) toggleDestinationMode(false);
                 });
             });
 
@@ -4507,7 +4514,7 @@
                 const input = document.getElementById('search-input');
                 document.getElementById('suggestions').classList.remove('show');
                 searchAndRoute(input.value);
-                if (saveModeActive) toggleSaveMode(false);
+                if (destinationMode) toggleDestinationMode(false);
             });
 
             document.getElementById('search-input').addEventListener('keypress', (e) => {
@@ -4530,7 +4537,7 @@
                 const modal = document.getElementById('favorites-modal');
                 modal.style.display = 'flex';
                 renderFavoritesModal();
-                if (saveModeActive) toggleSaveMode(false);
+                if (destinationMode) toggleDestinationMode(false);
             });
 
             document.getElementById('close-favorites-modal').addEventListener('click', function() {
@@ -4550,7 +4557,7 @@
                 }
             });
 
-            // ===== CLEAR ROTA (com pergunta) =====
+            // ===== CLEAR ROTA =====
             function clearRoute() {
                 if (currentRoute) { map.removeLayer(currentRoute);
                     currentRoute = null; }
@@ -4567,7 +4574,7 @@
                 currentDestination = null;
                 navigateBtn.disabled = true;
                 map.closePopup();
-                if (saveModeActive) toggleSaveMode(false);
+                if (destinationMode) toggleDestinationMode(false);
             }
 
             document.getElementById('clear-route-btn').addEventListener('click', () => {
@@ -4585,7 +4592,7 @@
             // ===== CLEAR TRACK =====
             clearTrackBtn.addEventListener('click', function() {
                 clearTrack();
-                if (saveModeActive) toggleSaveMode(false);
+                if (destinationMode) toggleDestinationMode(false);
             });
 
             navigateBtn.addEventListener('click', startNavigation);
@@ -4629,7 +4636,7 @@
                 } else {
                     styleFlag.classList.add('active');
                 }
-                if (saveModeActive) toggleSaveMode(false);
+                if (destinationMode) toggleDestinationMode(false);
             }
 
             function closeConfig() {
@@ -4664,7 +4671,7 @@
                 config.dataSource = source;
                 localStorage.setItem('gps_config', JSON.stringify(config));
                 if (userLocation) carregarPOIsReais();
-                if (saveModeActive) toggleSaveMode(false);
+                if (destinationMode) toggleDestinationMode(false);
             }
 
             sourceGratuito.addEventListener('click', function() {
@@ -4704,7 +4711,7 @@
                 e.stopPropagation();
                 const newState = !offlineMode;
                 setOfflineMode(newState);
-                if (saveModeActive) toggleSaveMode(false);
+                if (destinationMode) toggleDestinationMode(false);
             });
 
             orientationSelect.addEventListener('change', function() {
@@ -4718,7 +4725,7 @@
                 carregarPOIsReais();
                 closeConfig();
                 saveMapState();
-                if (saveModeActive) toggleSaveMode(false);
+                if (destinationMode) toggleDestinationMode(false);
             });
 
             document.addEventListener('keydown', (e) => {
