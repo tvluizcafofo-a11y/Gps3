@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-rotate@0.1.4/dist/leaflet-rotate.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/togeojson@0.16.0/togeojson.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/togeojson@0.16.0/togeojson.min.js">
+    </script>
     <style>
         /* ===== ESTILOS GERAIS ===== */
         * {
@@ -81,7 +82,9 @@
             align-items: center;
             pointer-events: none;
         }
-        #toolbar>* { pointer-events: auto; }
+        #toolbar>* {
+            pointer-events: auto;
+        }
         .search-box {
             flex: 1;
             min-width: 180px;
@@ -129,8 +132,12 @@
             justify-content: center;
             min-width: 50px;
         }
-        .search-box button:hover { background: var(--accent-hover); }
-        .search-box button i { font-size: 1.1rem; }
+        .search-box button:hover {
+            background: var(--accent-hover);
+        }
+        .search-box button i {
+            font-size: 1.1rem;
+        }
         #suggestions {
             position: absolute;
             top: 100%;
@@ -146,7 +153,9 @@
             display: none;
             z-index: 2000;
         }
-        #suggestions.show { display: block; }
+        #suggestions.show {
+            display: block;
+        }
         #suggestions .suggestion-item {
             padding: 10px 18px;
             cursor: pointer;
@@ -154,7 +163,9 @@
             transition: background 0.2s;
             color: var(--text-primary);
         }
-        #suggestions .suggestion-item:hover { background: var(--bg-input); }
+        #suggestions .suggestion-item:hover {
+            background: var(--bg-input);
+        }
         .toolbar-actions {
             display: flex;
             gap: 8px;
@@ -212,8 +223,12 @@
             animation: spin 2s linear infinite;
         }
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
         #gps-precision {
             background: var(--bg-input);
@@ -224,10 +239,18 @@
             border: 1px solid var(--border-light);
             font-family: monospace;
         }
-        .status-searching { color: #facc15; }
-        .status-active { color: #16a34a; }
-        .status-error { color: #ef4444; }
-        .status-offline { color: var(--offline); }
+        .status-searching {
+            color: #facc15;
+        }
+        .status-active {
+            color: #16a34a;
+        }
+        .status-error {
+            color: #ef4444;
+        }
+        .status-offline {
+            color: var(--offline);
+        }
         .btn-icon {
             width: 44px;
             height: 44px;
@@ -250,8 +273,13 @@
             color: white;
             transform: scale(1.05);
         }
-        .btn-icon.star { color: var(--gold); }
-        .btn-icon.star:hover { background: var(--gold); color: white; }
+        .btn-icon.star {
+            color: var(--gold);
+        }
+        .btn-icon.star:hover {
+            background: var(--gold);
+            color: white;
+        }
         .btn-icon .badge {
             position: absolute;
             top: -4px;
@@ -283,9 +311,15 @@
             background: #dc2626;
         }
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
         .transport-selector-dropdown {
             position: absolute;
@@ -303,7 +337,9 @@
             z-index: 2000;
             justify-content: center;
         }
-        .transport-selector-dropdown.open { display: flex; }
+        .transport-selector-dropdown.open {
+            display: flex;
+        }
         .transport-selector-dropdown .transport-btn {
             width: 44px;
             height: 44px;
@@ -324,7 +360,9 @@
             color: white;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
-        .transport-selector-dropdown .transport-btn:hover { transform: scale(1.05); }
+        .transport-selector-dropdown .transport-btn:hover {
+            transform: scale(1.05);
+        }
         #navigate-btn {
             position: absolute;
             bottom: 100px;
@@ -551,19 +589,64 @@
             font-size: 1rem;
             fill: var(--text-secondary);
         }
-        /* Jeep Willys */
+        /* Jeep Willys - NOVO: imagem + ponteiro SVG + overlay */
         #full-jeep {
             max-width: 600px;
             width: 100%;
+            position: relative;
+            margin: 0 auto;
+            font-family: 'Roboto Condensed', sans-serif;
         }
-        #full-jeep canvas {
+        #full-jeep .jeep-pointer-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        #full-jeep .jeep-pointer-wrapper svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        #full-jeep .jeep-overlay-data {
+            position: absolute;
+            bottom: 18%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #f0e6c0;
+            font-family: 'Roboto Condensed', sans-serif;
+            text-align: center;
+            z-index: 5;
+            width: 60%;
+            background: rgba(0, 0, 0, 0.55);
+            padding: 8px 0 10px;
+            border-radius: 10px;
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        #full-jeep .jeep-overlay-data .jeep-odo-display {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+        }
+        #full-jeep .jeep-overlay-data .jeep-altitude-display {
+            font-size: 1rem;
+            color: #aaa;
+            text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+            margin-top: 2px;
+        }
+        #full-jeep img {
             width: 100%;
             height: auto;
             display: block;
-            margin: 0 auto;
             border-radius: 40px;
             background: #0f0f0f;
-            font-family: 'Roboto Condensed', sans-serif;
+            z-index: 1;
+            position: relative;
         }
         /* Ações */
         #speedometer-fullscreen .full-actions {
@@ -608,7 +691,9 @@
             overflow-y: auto;
             scroll-behavior: smooth;
         }
-        #config-panel.open { right: 0; }
+        #config-panel.open {
+            right: 0;
+        }
         .panel-content {
             flex: 1;
             min-height: 200vh;
@@ -638,7 +723,9 @@
             padding: 0 6px;
             transition: color 0.2s;
         }
-        .panel-header .btn-close:hover { color: var(--text-primary); }
+        .panel-header .btn-close:hover {
+            color: var(--text-primary);
+        }
         .subtitle {
             color: var(--text-secondary);
             font-size: 0.85rem;
@@ -674,7 +761,9 @@
             padding: 6px 0;
             border-bottom: 1px solid var(--border-light);
         }
-        .config-item:last-child { border-bottom: none; }
+        .config-item:last-child {
+            border-bottom: none;
+        }
         .config-item label {
             font-weight: 500;
             font-size: 1.8rem;
@@ -683,7 +772,10 @@
             gap: 8px;
             color: var(--text-primary);
         }
-        .config-item label i { width: 18px; color: var(--accent); }
+        .config-item label i {
+            width: 18px;
+            color: var(--accent);
+        }
         .config-item .config-input-number {
             width: 80px;
             padding: 4px 8px;
@@ -695,7 +787,9 @@
             text-align: center;
             outline: none;
         }
-        .config-item .config-input-number:focus { border-color: var(--accent); }
+        .config-item .config-input-number:focus {
+            border-color: var(--accent);
+        }
         .toggle {
             position: relative;
             width: 42px;
@@ -706,7 +800,9 @@
             transition: background 0.3s;
             flex-shrink: 0;
         }
-        .toggle.active { background: var(--accent); }
+        .toggle.active {
+            background: var(--accent);
+        }
         .toggle .knob {
             position: absolute;
             top: 2px;
@@ -718,7 +814,9 @@
             transition: left 0.3s;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
-        .toggle.active .knob { left: 22px; }
+        .toggle.active .knob {
+            left: 22px;
+        }
         .config-select {
             padding: 4px 12px;
             border-radius: 30px;
@@ -730,7 +828,9 @@
             outline: none;
             cursor: pointer;
         }
-        .config-select:focus { border-color: var(--accent); }
+        .config-select:focus {
+            border-color: var(--accent);
+        }
         .destination-style-selector {
             display: flex;
             gap: 12px;
@@ -757,7 +857,9 @@
             color: white;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
-        .destination-style-btn:hover { transform: scale(1.02); }
+        .destination-style-btn:hover {
+            transform: scale(1.02);
+        }
         .destination-style-btn .preview-dot {
             width: 14px;
             height: 14px;
@@ -795,8 +897,12 @@
             color: white;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
-        .data-source-btn:hover { transform: scale(1.02); }
-        .data-source-btn i { font-size: 1rem; }
+        .data-source-btn:hover {
+            transform: scale(1.02);
+        }
+        .data-source-btn i {
+            font-size: 1rem;
+        }
         .token-accordion {
             border: 1px solid var(--border-light);
             border-radius: 12px;
@@ -851,7 +957,9 @@
             outline: none;
             font-family: monospace;
         }
-        .token-input-group input:focus { border-color: var(--accent); }
+        .token-input-group input:focus {
+            border-color: var(--accent);
+        }
         .token-input-group .btn-small {
             padding: 6px 14px;
             border-radius: 30px;
@@ -864,7 +972,9 @@
             transition: background 0.2s;
             white-space: nowrap;
         }
-        .token-input-group .btn-small:hover { background: var(--accent-hover); }
+        .token-input-group .btn-small:hover {
+            background: var(--accent-hover);
+        }
         .token-status {
             font-size: 1rem;
             margin-top: 4px;
@@ -872,8 +982,12 @@
             align-items: center;
             gap: 6px;
         }
-        .token-status.valid { color: var(--success); }
-        .token-status.invalid { color: var(--danger); }
+        .token-status.valid {
+            color: var(--success);
+        }
+        .token-status.invalid {
+            color: var(--danger);
+        }
         .import-controls {
             display: flex;
             gap: 8px;
@@ -893,19 +1007,27 @@
             transition: background 0.2s;
             white-space: nowrap;
         }
-        .btn-import:hover { background: var(--accent-hover); }
+        .btn-import:hover {
+            background: var(--accent-hover);
+        }
         .btn-import.danger {
             background: var(--danger);
         }
-        .btn-import.danger:hover { background: #dc2626; }
+        .btn-import.danger:hover {
+            background: #dc2626;
+        }
         .import-status {
             font-size: 1rem;
             color: var(--text-secondary);
             margin-top: 4px;
             word-break: break-all;
         }
-        .import-status.success { color: var(--success); }
-        .import-status.error { color: var(--danger); }
+        .import-status.success {
+            color: var(--success);
+        }
+        .import-status.error {
+            color: var(--danger);
+        }
         .btn-save-config {
             width: 100%;
             padding: 10px;
@@ -924,8 +1046,13 @@
             justify-content: center;
             gap: 10px;
         }
-        .btn-save-config:hover { background: var(--accent-hover); }
-        .spacer { height: 20px; flex-shrink: 0; }
+        .btn-save-config:hover {
+            background: var(--accent-hover);
+        }
+        .spacer {
+            height: 20px;
+            flex-shrink: 0;
+        }
         #overlay {
             position: fixed;
             top: 0;
@@ -937,7 +1064,9 @@
             display: none;
             backdrop-filter: blur(2px);
         }
-        #overlay.show { display: block; }
+        #overlay.show {
+            display: block;
+        }
         #config-toggle-btn {
             position: fixed;
             bottom: 30px;
@@ -1007,12 +1136,16 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--border-light);
         }
-        .leaflet-popup-tip { background: var(--bg-card); }
+        .leaflet-popup-tip {
+            background: var(--bg-card);
+        }
         .leaflet-popup-content {
             padding: 8px 12px;
             min-width: 170px;
         }
-        .leaflet-popup-content strong { color: var(--accent); }
+        .leaflet-popup-content strong {
+            color: var(--accent);
+        }
         .btn-save-favorite {
             background: var(--gold);
             color: white;
@@ -1028,12 +1161,16 @@
             gap: 6px;
             margin-top: 5px;
         }
-        .btn-save-favorite:hover { background: #d97706; }
+        .btn-save-favorite:hover {
+            background: #d97706;
+        }
         .btn-save-favorite.saved {
             background: var(--success);
             cursor: default;
         }
-        .btn-save-favorite.saved:hover { background: var(--success); }
+        .btn-save-favorite.saved:hover {
+            background: var(--success);
+        }
         .favorite-marker {
             filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.6));
         }
@@ -1177,7 +1314,9 @@
             cursor: pointer;
             color: var(--text-secondary);
         }
-        #save-favorite-modal .modal-header .close-modal:hover { color: var(--text-primary); }
+        #save-favorite-modal .modal-header .close-modal:hover {
+            color: var(--text-primary);
+        }
         #save-favorite-modal label {
             font-weight: 600;
             font-size: 0.9rem;
@@ -1278,7 +1417,9 @@
             cursor: pointer;
             color: var(--text-secondary);
         }
-        #share-modal .modal-header .close-modal:hover { color: var(--text-primary); }
+        #share-modal .modal-header .close-modal:hover {
+            color: var(--text-primary);
+        }
         #share-modal .coords-display {
             font-size: 0.9rem;
             color: var(--text-secondary);
@@ -1312,18 +1453,24 @@
             background: var(--gold);
             color: white;
         }
-        #share-modal .btn-share-save:hover { background: #d97706; }
+        #share-modal .btn-share-save:hover {
+            background: #d97706;
+        }
         #share-modal .btn-share-share {
             background: var(--accent);
             color: white;
         }
-        #share-modal .btn-share-share:hover { background: var(--accent-hover); }
+        #share-modal .btn-share-share:hover {
+            background: var(--accent-hover);
+        }
         #share-modal .btn-share-cancel {
             background: var(--bg-input);
             color: var(--text-secondary);
             border: 1px solid var(--border-light);
         }
-        #share-modal .btn-share-cancel:hover { background: var(--border-light); }
+        #share-modal .btn-share-cancel:hover {
+            background: var(--border-light);
+        }
         /* ===== MODAL AJUDA (LISTA EXPANSÍVEL) ===== */
         #help-modal {
             display: none;
@@ -1490,7 +1637,9 @@
                 right: -100%;
                 padding: 20px;
             }
-            #config-panel.open { right: 0; }
+            #config-panel.open {
+                right: 0;
+            }
             #toolbar {
                 top: 12px;
                 left: 12px;
@@ -1510,7 +1659,9 @@
                 font-size: 0.85rem;
                 min-width: 40px;
             }
-            .search-box button i { font-size: 1rem; }
+            .search-box button i {
+                font-size: 1rem;
+            }
             .btn-icon {
                 width: 38px;
                 height: 38px;
@@ -1565,8 +1716,17 @@
             #full-analog .analog-odo .altitude-value {
                 font-size: 0.8rem;
             }
-            #full-jeep canvas {
-                max-width: 100%;
+            #full-jeep .jeep-overlay-data .jeep-odo-display {
+                font-size: 1.6rem;
+                letter-spacing: 2px;
+            }
+            #full-jeep .jeep-overlay-data .jeep-altitude-display {
+                font-size: 0.8rem;
+            }
+            #full-jeep .jeep-overlay-data {
+                bottom: 16%;
+                width: 70%;
+                padding: 6px 0 8px;
             }
             #speedometer-fullscreen .full-actions {
                 flex-direction: column;
@@ -1582,18 +1742,24 @@
                 bottom: 18px;
                 left: 12px;
             }
-            #legend { display: none; }
+            #legend {
+                display: none;
+            }
             #gps-status {
                 font-size: 0.7rem;
                 padding: 4px 10px;
                 gap: 4px;
             }
-            #gps-status i { font-size: 0.9rem; }
+            #gps-status i {
+                font-size: 0.9rem;
+            }
             #gps-precision {
                 font-size: 0.6rem;
                 padding: 1px 6px;
             }
-            .panel-header h2 { font-size: 1.2rem; }
+            .panel-header h2 {
+                font-size: 1.2rem;
+            }
             .transport-selector-dropdown {
                 width: 180px;
                 right: -20px;
@@ -1705,7 +1871,6 @@
                         <button class="transport-btn" data-mode="driving" title="Trem"><i class="fas fa-train"></i></button>
                         <button class="transport-btn" data-mode="driving" title="Moto"><i class="fas fa-motorcycle"></i></button>
                     </div>
-                    <!-- Botão modo destino (substitui o antigo save-mode) -->
                     <button class="btn-icon destination-mode" id="destination-btn" title="Definir destino clicando no mapa">
                         <i class="fas fa-flag-checkered"></i>
                     </button>
@@ -1767,9 +1932,22 @@
                 <div id="full-analog" class="full-speed-container" style="display:none;">
                     <svg id="analog-svg" viewBox="0 0 400 400" width="100%" height="100%" style="max-width:600px; max-height:600px; display:block; margin:0 auto;"></svg>
                 </div>
-                <!-- Container Jeep Willys -->
+                <!-- Container Jeep Willys - NOVO: imagem + ponteiro SVG + overlay -->
                 <div id="full-jeep" class="full-speed-container" style="display:none;">
-                    <canvas id="jeep-canvas" width="800" height="800"></canvas>
+                    <img src="VeloJeepBranco.jpg" alt="Velocímetro Jeep" id="jeep-bg-img" style="width:100%; height:auto; display:block; border-radius:40px; background:#0f0f0f; z-index:1; position:relative;">
+                    <div class="jeep-pointer-wrapper">
+                        <svg viewBox="0 0 800 800" style="width:100%; height:100%; display:block;">
+                            <g id="jeep-pointer-group" transform="translate(400,400) rotate(0)">
+                                <polygon points="-10,-14 10,-14 0,-320" fill="#cc2222" stroke="#8a1a1a" stroke-width="2" />
+                                <circle cx="0" cy="0" r="36" fill="#cc2222" stroke="#555" stroke-width="6" />
+                                <circle cx="0" cy="0" r="14" fill="#2b2b2b" stroke="#5a4a2a" stroke-width="4" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="jeep-overlay-data">
+                        <div class="jeep-odo-display" id="jeep-odo-display">000000</div>
+                        <div class="jeep-altitude-display" id="jeep-altitude-display">Alt: -- m</div>
+                    </div>
                 </div>
                 <!-- Ações -->
                 <div class="full-actions">
@@ -2041,8 +2219,10 @@
         <button id="config-toggle-btn"><i class="fas fa-cog"></i></button>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet-rotate@0.1.4/dist/leaflet-rotate.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-rotate@0.1.4/dist/leaflet-rotate.min.js">
+    </script>
     <script>
         (function() {
             'use strict';
@@ -2093,9 +2273,9 @@
             // Trajetória (tracklog)
             let trackData = [];
             let trackLine = null;
-            let lastTrackPoint = null; // {lat, lng, timestamp}
-            let trackIntervalSec = 2; // default
-            let trackDistanceM = 5; // default
+            let lastTrackPoint = null;
+            let trackIntervalSec = 2;
+            let trackDistanceM = 5;
             let trackDataModified = false;
 
             // Velocímetro
@@ -2108,14 +2288,12 @@
             // ===== WAKE LOCK =====
             let wakeLockSentinel = null;
 
-            // ======================== VARIÁVEIS MODO DESTINO ========================
+            // ===== MODO DESTINO =====
             let destinationMode = false;
 
-            // ======================== VARIÁVEIS MODAL SALVAR FAVORITO ========================
+            // ===== MODAIS =====
             let pendingSaveCoords = null;
             let pendingSaveCallback = null;
-
-            // ======================== VARIÁVEIS MODAL COMPARTILHAR ========================
             let shareCoords = null;
 
             // ======================== DADOS DA AJUDA ========================
@@ -2158,7 +2336,7 @@
             }, {
                 icon: 'fa-tachometer-alt',
                 title: 'Velocímetro',
-                description: 'O velocímetro digital no canto superior esquerdo mostra sua velocidade atual (km/h). Clique nele para abrir em tela cheia, onde você pode alternar entre os modos Digital, Analógico (escala até 200 km/h) e Jeep Willys.'
+                description: 'O velocímetro digital no canto superior esquerdo mostra sua velocidade atual (km/h). Clique nele para abrir em tela cheia, onde você pode alternar entre os modos Digital, Analógico (escala até 200 km/h) e Jeep Willys (imagem com ponteiro).'
             }];
 
             // ======================== FAVORITOS ========================
@@ -2243,7 +2421,11 @@
             const fullDigital = document.getElementById('full-digital');
             const fullAnalog = document.getElementById('full-analog');
             const fullJeep = document.getElementById('full-jeep');
-            const jeepCanvas = document.getElementById('jeep-canvas');
+
+            // Jeep DOM
+            const jeepPointerGroup = document.getElementById('jeep-pointer-group');
+            const jeepOdoDisplay = document.getElementById('jeep-odo-display');
+            const jeepAltitudeDisplay = document.getElementById('jeep-altitude-display');
 
             const styleDot = document.getElementById('style-dot');
             const styleFlag = document.getElementById('style-flag');
@@ -2261,332 +2443,22 @@
                 favBadge.textContent = favorites.length;
             }
 
-            // ======================== VELOCÍMETRO JEEP WILLYS ========================
+            // ======================== VELOCÍMETRO JEEP WILLYS (imagem + ponteiro) ========================
             function renderJeepSpeedometer(speed, odoTotal, altitude) {
-                if (!jeepCanvas) return;
-                const ctx = jeepCanvas.getContext('2d');
-                const W = 800,
-                    H = 800;
-                const cx = W / 2,
-                    cy = H / 2;
-                const mainRadius = 370;
-                const tempValue = 70;
-                const fuelValue = 25;
+                if (!jeepPointerGroup) return;
 
-                function degToRad(deg) { return deg * Math.PI / 180; }
+                const speedVal = Math.min(Math.max(speed, 0), 140);
+                const frac = speedVal / 140;
+                const angleDeg = frac * 200; // 0 a 200 graus
+                const rotation = angleDeg - 90; // 0° = topo (12h)
 
-                function speedToAngleDeg(s) {
-                    const frac = (s - 0) / (140 - 0);
-                    return 0 + frac * 200;
-                }
+                jeepPointerGroup.setAttribute('transform', `translate(400,400) rotate(${rotation})`);
 
-                function scaleDegToCanvasRad(scaleDeg) {
-                    return degToRad(-90 + scaleDeg);
-                }
+                const odoStr = String(Math.floor(odoTotal || 0)).padStart(6, '0');
+                if (jeepOdoDisplay) jeepOdoDisplay.textContent = odoStr;
 
-                function drawArcGauge(startDeg, endDeg, value, minVal, maxVal, labelMin, labelMax, color) {
-                    const radius = mainRadius - 58;
-                    const arcWidth = 50;
-                    const startRad = degToRad(startDeg - 90 - 1);
-                    const endRad = degToRad(endDeg - 90 + 1);
-                    const innerR = radius - arcWidth / 2 - 2;
-                    const outerR = radius + arcWidth / 2 + 2;
-
-                    const origStartRad = degToRad(startDeg - 90);
-                    const origEndRad = degToRad(endDeg - 90);
-
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(cx, cy, radius, origStartRad, origEndRad, false);
-                    ctx.strokeStyle = '#666';
-                    ctx.lineWidth = arcWidth;
-                    ctx.lineCap = 'round';
-                    ctx.shadowColor = 'rgba(0,0,0,0.3)';
-                    ctx.shadowBlur = 4;
-                    ctx.stroke();
-                    ctx.restore();
-
-                    const stepDeg = 10;
-                    const offset = 3;
-                    for (let deg = startDeg + offset; deg <= endDeg; deg += stepDeg) {
-                        const angleRad = degToRad(deg - 90);
-                        const tickOuter = radius + arcWidth / 2;
-                        const tickInner = radius + arcWidth / 2 - 18;
-                        const x1 = cx + tickInner * Math.cos(angleRad);
-                        const y1 = cy + tickInner * Math.sin(angleRad);
-                        const x2 = cx + tickOuter * Math.cos(angleRad);
-                        const y2 = cy + tickOuter * Math.sin(angleRad);
-                        ctx.save();
-                        ctx.beginPath();
-                        ctx.moveTo(x1, y1);
-                        ctx.lineTo(x2, y2);
-                        ctx.strokeStyle = '#ddd';
-                        ctx.lineWidth = 5;
-                        ctx.lineCap = 'round';
-                        ctx.shadowColor = 'rgba(0,0,0,0.3)';
-                        ctx.shadowBlur = 2;
-                        ctx.stroke();
-                        ctx.restore();
-                    }
-
-                    const labelRadius = outerR + 28;
-                    const minAngleRad = degToRad(startDeg - 90);
-                    const maxAngleRad = degToRad(endDeg - 90);
-                    const xMin = cx + labelRadius * Math.cos(minAngleRad);
-                    const yMin = cy + labelRadius * Math.sin(minAngleRad);
-                    const xMax = cx + labelRadius * Math.cos(maxAngleRad);
-                    const yMax = cy + labelRadius * Math.sin(maxAngleRad);
-
-                    ctx.save();
-                    ctx.font = 'bold 26px "Roboto Condensed", sans-serif';
-                    ctx.fillStyle = '#d0d0d0';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.shadowColor = 'rgba(0,0,0,0.6)';
-                    ctx.shadowBlur = 5;
-                    ctx.fillText(labelMin, xMin, yMin);
-                    ctx.fillText(labelMax, xMax, yMax);
-                    ctx.restore();
-
-                    const frac = (value - minVal) / (maxVal - minVal);
-                    const angleDegPointer = startDeg + frac * (endDeg - startDeg);
-                    const angleRadPointer = degToRad(angleDegPointer - 90);
-                    const innerX = cx + (radius - arcWidth / 2) * Math.cos(angleRadPointer);
-                    const innerY = cy + (radius - arcWidth / 2) * Math.sin(angleRadPointer);
-                    const outerX = cx + (radius + arcWidth / 2) * Math.cos(angleRadPointer);
-                    const outerY = cy + (radius + arcWidth / 2) * Math.sin(angleRadPointer);
-
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(cx, cy, outerR, startRad, endRad, false);
-                    const startInnerX = cx + innerR * Math.cos(startRad);
-                    const startInnerY = cy + innerR * Math.sin(startRad);
-                    ctx.lineTo(startInnerX, startInnerY);
-                    ctx.arc(cx, cy, innerR, endRad, startRad, true);
-                    ctx.closePath();
-                    ctx.clip();
-
-                    ctx.beginPath();
-                    ctx.moveTo(innerX, innerY);
-                    ctx.lineTo(outerX, outerY);
-                    ctx.strokeStyle = color;
-                    ctx.lineWidth = 12;
-                    ctx.lineCap = 'round';
-                    ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                    ctx.shadowBlur = 6;
-                    ctx.stroke();
-                    ctx.restore();
-                }
-
-                if (!CanvasRenderingContext2D.prototype.roundRect) {
-                    CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
-                        if (w < 2 * r) r = w / 2;
-                        if (h < 2 * r) r = h / 2;
-                        this.moveTo(x + r, y);
-                        this.lineTo(x + w - r, y);
-                        this.quadraticCurveTo(x + w, y, x + w, y + r);
-                        this.lineTo(x + w, y + h - r);
-                        this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-                        this.lineTo(x + r, y + h);
-                        this.quadraticCurveTo(x, y + h, x, y + h - r);
-                        this.lineTo(x, y + r);
-                        this.quadraticCurveTo(x, y, x + r, y);
-                        return this;
-                    };
-                }
-
-                ctx.clearRect(0, 0, W, H);
-                ctx.fillStyle = '#0f0f0f';
-                ctx.fillRect(0, 0, W, H);
-
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(cx, cy, mainRadius + 12, 0, Math.PI * 2);
-                ctx.fillStyle = '#0f0f0f';
-                ctx.fill();
-                ctx.strokeStyle = '#444';
-                ctx.lineWidth = 24;
-                ctx.stroke();
-                ctx.restore();
-
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(cx, cy, mainRadius - 4, 0, Math.PI * 2);
-                ctx.strokeStyle = '#2a2a2a';
-                ctx.lineWidth = 10;
-                ctx.stroke();
-                ctx.restore();
-
-                const fontSize = 99;
-                ctx.font = `bold ${fontSize}px "Roboto Condensed", sans-serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-
-                for (let i = 0; i <= 14; i++) {
-                    const val = i * 10;
-                    const scaleDeg = speedToAngleDeg(val);
-                    const canvasRad = scaleDegToCanvasRad(scaleDeg);
-
-                    const inner = mainRadius - 28;
-                    const outer = mainRadius - 8;
-                    const x1 = cx + inner * Math.sin(canvasRad);
-                    const y1 = cy - inner * Math.cos(canvasRad);
-                    const x2 = cx + outer * Math.sin(canvasRad);
-                    const y2 = cy - outer * Math.cos(canvasRad);
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.moveTo(x1, y1);
-                    ctx.lineTo(x2, y2);
-                    ctx.strokeStyle = (val % 20 === 0) ? '#fff' : '#aaa';
-                    ctx.lineWidth = (val % 20 === 0) ? 6 : 3.5;
-                    ctx.stroke();
-                    ctx.restore();
-
-                    if (val % 20 === 0 && val >= 0) {
-                        const numDist = mainRadius - 72;
-                        const x = cx + numDist * Math.sin(canvasRad);
-                        const y = cy - numDist * Math.cos(canvasRad);
-                        const displayVal = val === 0 ? 0 : val / 10;
-                        ctx.save();
-                        ctx.translate(x, y);
-                        ctx.rotate(canvasRad);
-                        ctx.fillStyle = '#fff';
-                        ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                        ctx.shadowBlur = 4;
-                        ctx.fillText(displayVal, 0, 0);
-                        ctx.restore();
-                    }
-                }
-
-                ctx.save();
-                ctx.font = 'bold 26px "Roboto Condensed", sans-serif';
-                ctx.fillStyle = '#aaa';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('km/h', cx, cy + 120);
-                ctx.restore();
-
-                ctx.save();
-                ctx.font = 'bold 22px "Roboto Condensed", sans-serif';
-                ctx.fillStyle = '#888';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('● JEEP ●', cx, cy - 100);
-                ctx.restore();
-
-                const odomY = cy + 75;
-                const odomX = cx;
-                const odomW = 200;
-                const odomH = 50;
-                ctx.save();
-                ctx.shadowBlur = 0;
-                ctx.fillStyle = '#111';
-                ctx.strokeStyle = '#444';
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.roundRect(odomX - odomW / 2, odomY - odomH / 2, odomW, odomH, 8);
-                ctx.fill();
-                ctx.stroke();
-                ctx.restore();
-
-                const odomStr = String(Math.floor(odoTotal)).padStart(6, '0');
-                ctx.save();
-                ctx.font = 'bold 32px "Roboto Condensed", sans-serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillStyle = '#f0e6c0';
-                ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                ctx.shadowBlur = 2;
-                ctx.fillText(odomStr, cx, odomY + 2);
-                ctx.restore();
-
-                ctx.save();
-                ctx.font = 'bold 16px "Roboto Condensed", sans-serif';
-                ctx.fillStyle = '#888';
-                ctx.textAlign = 'left';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('km', cx + odomW / 2 + 10, odomY);
-                ctx.restore();
-
-                const altY = cy + 150;
-                ctx.save();
-                ctx.font = 'bold 20px "Roboto Condensed", sans-serif';
-                ctx.fillStyle = '#aaa';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                const altText = altitude !== null ? `${Math.round(altitude)} m` : '-- m';
-                ctx.fillText('Alt: ' + altText, cx, altY);
-                ctx.restore();
-
-                const speedDeg = speedToAngleDeg(speed);
-                const needleRad = scaleDegToCanvasRad(speedDeg);
-                const tipLen = mainRadius - 50;
-                const tipX = cx + tipLen * Math.sin(needleRad);
-                const tipY = cy - tipLen * Math.cos(needleRad);
-
-                ctx.save();
-                ctx.shadowColor = 'rgba(0,0,0,0.7)';
-                ctx.shadowBlur = 12;
-                const tipWidth = 10;
-                const baseWidth = 18;
-                const perpX = Math.cos(needleRad);
-                const perpY = Math.sin(needleRad);
-                const baseX1 = cx - (baseWidth / 2) * perpX;
-                const baseY1 = cy - (baseWidth / 2) * perpY;
-                const baseX2 = cx + (baseWidth / 2) * perpX;
-                const baseY2 = cy + (baseWidth / 2) * perpY;
-                const tipX1 = tipX - (tipWidth / 2) * perpX;
-                const tipY1 = tipY - (tipWidth / 2) * perpY;
-                const tipX2 = tipX + (tipWidth / 2) * perpX;
-                const tipY2 = tipY + (tipWidth / 2) * perpY;
-                ctx.beginPath();
-                ctx.moveTo(baseX1, baseY1);
-                ctx.lineTo(tipX1, tipY1);
-                ctx.lineTo(tipX2, tipY2);
-                ctx.lineTo(baseX2, baseY2);
-                ctx.closePath();
-                ctx.fillStyle = '#cc2222';
-                ctx.fill();
-                ctx.shadowBlur = 0;
-                ctx.strokeStyle = '#8a1a1a';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-                ctx.restore();
-
-                ctx.save();
-                ctx.shadowBlur = 8;
-                ctx.beginPath();
-                ctx.arc(cx, cy, 30, 0, Math.PI * 2);
-                ctx.fillStyle = '#cc2222';
-                ctx.fill();
-                ctx.strokeStyle = '#555';
-                ctx.lineWidth = 5;
-                ctx.stroke();
-                ctx.restore();
-
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(cx, cy, 12, 0, Math.PI * 2);
-                ctx.fillStyle = '#2b2b2b';
-                ctx.fill();
-                ctx.strokeStyle = '#5a4a2a';
-                ctx.lineWidth = 3;
-                ctx.stroke();
-                ctx.restore();
-
-                const glow = ctx.createRadialGradient(cx - 50, cy - 60, 20, cx, cy, mainRadius);
-                glow.addColorStop(0, 'rgba(255,240,200,0.06)');
-                glow.addColorStop(0.5, 'rgba(255,240,200,0.02)');
-                glow.addColorStop(1, 'rgba(0,0,0,0)');
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(cx, cy, mainRadius, 0, Math.PI * 2);
-                ctx.fillStyle = glow;
-                ctx.fill();
-                ctx.restore();
-
-                drawArcGauge(190, 225, tempValue, 0, 100, 'Q', 'F', '#cc2222');
-                drawArcGauge(135, 170, fuelValue, 0, 100, 'C', 'V', '#cc2222');
+                const altText = (altitude !== null && altitude !== undefined) ? `${Math.round(altitude)} m` : '-- m';
+                if (jeepAltitudeDisplay) jeepAltitudeDisplay.textContent = `Alt: ${altText}`;
             }
 
             // ======================== VELOCÍMETRO ANALÓGICO ========================
@@ -2615,10 +2487,12 @@
                     const outerR = isMain ? R - 12 : R - 10;
                     const p1 = polarToXY(deg, innerR);
                     const p2 = polarToXY(deg, outerR);
-                    marks += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="var(--text-primary)" stroke-width="${isMain ? 3 : 1.5}" />`;
+                    marks +=
+                        `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="var(--text-primary)" stroke-width="${isMain ? 3 : 1.5}" />`;
                     if (isMain) {
                         const pNum = polarToXY(deg, R - 48);
-                        marks += `<text x="${pNum.x}" y="${pNum.y}" text-anchor="middle" dominant-baseline="central" fill="var(--text-secondary)" font-size="24" font-weight="700">${kmh}</text>`;
+                        marks +=
+                            `<text x="${pNum.x}" y="${pNum.y}" text-anchor="middle" dominant-baseline="central" fill="var(--text-secondary)" font-size="24" font-weight="700">${kmh}</text>`;
                     }
                 }
 
@@ -2775,7 +2649,7 @@
                 }
             });
 
-            // ======================== ESTILOS DO VELOCÍMETRO (com persistência) ========================
+            // ======================== ESTILOS DO VELOCÍMETRO ========================
             function setFullscreenStyle(style) {
                 fullscreenStyle = style;
                 const config = JSON.parse(localStorage.getItem('gps_config') || '{}');
@@ -2961,7 +2835,7 @@
                 }
             }
 
-            // ======================== TRAJETÓRIA (TRACKLOG) COM FILTRO DE PRECISÃO ========================
+            // ======================== TRAJETÓRIA ========================
             function shouldAddTrackPoint(lat, lng, accuracy) {
                 if (accuracy !== undefined && accuracy !== null && accuracy > 50) {
                     return false;
@@ -2996,7 +2870,6 @@
                 }
             }
 
-            // ===== LIMPAR TRAJETÓRIA =====
             function doClearTrack() {
                 trackData = [];
                 lastTrackPoint = null;
@@ -3021,7 +2894,7 @@
                 doClearTrack();
             }
 
-            // ======================== EXPORTAR TRACKLOG (GPX) ========================
+            // ======================== EXPORTAR TRACKLOG ========================
             async function exportTrackGPX() {
                 if (trackData.length < 2) {
                     alert('Trajetória muito curta para exportar (necessário pelo menos 2 pontos).');
@@ -3082,7 +2955,7 @@
                 trackDataModified = false;
             }
 
-            // ======================== COMPARTILHAR LOCALIZAÇÃO ========================
+            // ======================== COMPARTILHAR ========================
             function compartilharLocalizacao(lat, lng) {
                 if (lat === undefined || lng === undefined) {
                     if (!userLocation) {
@@ -3167,13 +3040,13 @@
                 if (e.target === this) closeShareModalFn();
             });
 
-            // ======================== CLIQUE LONGO (HOLD) NO MAPA ========================
+            // ======================== CLIQUE LONGO ========================
             let holdTimer = null;
             let holdCoords = null;
 
             function startHold(e) {
                 if (e.originalEvent.target.closest('.leaflet-marker-icon')) return;
-                if (destinationMode) return; // modo destino tem prioridade
+                if (destinationMode) return;
 
                 const latlng = e.latlng;
                 holdCoords = latlng;
@@ -3196,7 +3069,7 @@
             map.on('pointerup', cancelHold);
             map.on('pointercancel', cancelHold);
 
-            // ======================== MODO DESTINO (CLIQUE NO MAPA) ========================
+            // ======================== MODO DESTINO ========================
             function toggleDestinationMode(activate) {
                 destinationMode = activate;
                 if (activate) {
@@ -3217,11 +3090,9 @@
                 toggleDestinationMode(!destinationMode);
             });
 
-            // Clique no mapa para definir destino (quando modo ativo)
             map.on('click', function(e) {
                 if (!destinationMode) return;
                 const latlng = e.latlng;
-                // Tenta obter nome via reverse geocode
                 reverseGeocode(latlng.lat, latlng.lng).then(name => {
                     const destName = name || 'Destino';
                     goToDestination(destName, latlng.lat, latlng.lng);
@@ -3232,7 +3103,7 @@
                 });
             });
 
-            // ======================== MODO OFF-LINE ========================
+            // ======================== OFF-LINE ========================
             function setOfflineMode(enable) {
                 offlineMode = enable;
                 if (enable) {
@@ -3661,7 +3532,6 @@
                         console.warn('⚠️ Erro no GPS:', err.message);
                         updateGpsStatus('error');
                         gpsErrorMsg.textContent = err.message || 'Erro de GPS';
-                        // Fallback
                         navigator.geolocation.getCurrentPosition(
                             (pos) => {
                                 console.log('✅ Fallback position:', pos.coords);
@@ -3747,7 +3617,7 @@
                 }
             });
 
-            // ======================== CARREGAR CONFIGURAÇÕES DO TRACKLOG ========================
+            // ======================== CARREGAR CONFIG TRACKLOG ========================
             function loadTrackConfig() {
                 const config = JSON.parse(localStorage.getItem('gps_config') || '{}');
                 if (config.trackInterval) {
@@ -3845,7 +3715,9 @@
                 poiMarkers = [];
                 todosPOIs.forEach(p => {
                     const marker = L.marker([p.lat, p.lng], { icon: getPoiIcon(p.type) })
-                        .bindPopup(`<strong>${p.name}</strong><br><span style="color:var(--text-secondary);">${p.type.charAt(0).toUpperCase() + p.type.slice(1)}</span>`)
+                        .bindPopup(
+                            `<strong>${p.name}</strong><br><span style="color:var(--text-secondary);">${p.type.charAt(0).toUpperCase() + p.type.slice(1)}</span>`
+                            )
                         .addTo(map);
                     poiMarkers.push(marker);
                 });
@@ -4224,7 +4096,7 @@
                 trackDistanceM = config.trackDistance;
             }
 
-            // ======================== WAKE LOCK (corrigido) ========================
+            // ======================== WAKE LOCK ========================
             async function requestWakeLock() {
                 if ('wakeLock' in navigator) {
                     try {
@@ -4282,14 +4154,13 @@
                 }
             });
 
-            // Reativa wake lock ao voltar para a aba
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'visible' && wakeLockToggle.classList.contains('active') && !wakeLockSentinel) {
                     requestWakeLock();
                 }
             });
 
-            // ======================== POPUP E ROTA ========================
+            // ======================== ROTA ========================
             async function calculateRoute(destLat, destLng, destName) {
                 if (offlineMode) return;
                 if (!userMarker) {
@@ -4410,7 +4281,7 @@
                 }
             }
 
-            // ======================== SALVAR ESTADO DO MAPA ========================
+            // ======================== SALVAR ESTADO ========================
             function saveMapState() {
                 const center = map.getCenter();
                 const zoom = map.getZoom();
@@ -4457,7 +4328,7 @@
                 if (destinationMode) toggleDestinationMode(false);
             });
 
-            // ======================== COMPARTILHAR LOCALIZAÇÃO ATUAL ========================
+            // ======================== COMPARTILHAR ========================
             shareLocationBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 if (userLocation) {
@@ -4468,7 +4339,6 @@
                 if (destinationMode) toggleDestinationMode(false);
             });
 
-            // ======================== SALVAR TRACKLOG ========================
             saveTrackBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 exportTrackGPX();
@@ -4589,7 +4459,6 @@
                 clearRoute();
             });
 
-            // ===== CLEAR TRACK =====
             clearTrackBtn.addEventListener('click', function() {
                 clearTrack();
                 if (destinationMode) toggleDestinationMode(false);
@@ -4891,7 +4760,7 @@
                 return { type: 'FeatureCollection', features };
             }
 
-            // ======================== CONFIRMAR SAÍDA (com aviso) ========================
+            // ======================== CONFIRMAR SAÍDA ========================
             window.addEventListener('beforeunload', function(e) {
                 if (trackDataModified && trackData.length > 0) {
                     e.preventDefault();
