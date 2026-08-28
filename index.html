@@ -589,7 +589,7 @@
             font-size: 1rem;
             fill: var(--text-secondary);
         }
-        /* Jeep Willys - NOVO: imagem + ponteiro SVG + overlay */
+        /* Jeep Willys - imagem + ponteiro SVG + overlay */
         #full-jeep {
             max-width: 600px;
             width: 100%;
@@ -613,16 +613,16 @@
         }
         #full-jeep .jeep-overlay-data {
             position: absolute;
-            bottom: 18%;
+            bottom: 6%;
             left: 50%;
             transform: translateX(-50%);
             color: #f0e6c0;
             font-family: 'Roboto Condensed', sans-serif;
             text-align: center;
             z-index: 5;
-            width: 60%;
+            width: 70%;
             background: rgba(0, 0, 0, 0.55);
-            padding: 8px 0 10px;
+            padding: 6px 0 8px;
             border-radius: 10px;
             backdrop-filter: blur(2px);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1717,16 +1717,16 @@
                 font-size: 0.8rem;
             }
             #full-jeep .jeep-overlay-data .jeep-odo-display {
-                font-size: 1.6rem;
+                font-size: 1.8rem;
                 letter-spacing: 2px;
             }
             #full-jeep .jeep-overlay-data .jeep-altitude-display {
                 font-size: 0.8rem;
             }
             #full-jeep .jeep-overlay-data {
-                bottom: 16%;
-                width: 70%;
-                padding: 6px 0 8px;
+                bottom: 4%;
+                width: 80%;
+                padding: 4px 0 6px;
             }
             #speedometer-fullscreen .full-actions {
                 flex-direction: column;
@@ -1932,13 +1932,16 @@
                 <div id="full-analog" class="full-speed-container" style="display:none;">
                     <svg id="analog-svg" viewBox="0 0 400 400" width="100%" height="100%" style="max-width:600px; max-height:600px; display:block; margin:0 auto;"></svg>
                 </div>
-                <!-- Container Jeep Willys - NOVO: imagem + ponteiro SVG + overlay -->
+                <!-- Container Jeep Willys - imagem + ponteiro SVG + overlay -->
                 <div id="full-jeep" class="full-speed-container" style="display:none;">
                     <img src="VeloJeepBranco.jpg" alt="Velocímetro Jeep" id="jeep-bg-img" style="width:100%; height:auto; display:block; border-radius:40px; background:#0f0f0f; z-index:1; position:relative;">
                     <div class="jeep-pointer-wrapper">
                         <svg viewBox="0 0 800 800" style="width:100%; height:100%; display:block;">
-                            <g id="jeep-pointer-group" transform="translate(400,400) rotate(0)">
-                                <polygon points="-10,-14 10,-14 0,-320" fill="#cc2222" stroke="#8a1a1a" stroke-width="2" />
+                            <!-- Ajuste de posição: translate(400, 390) para subir o ponteiro e centralizar -->
+                            <g id="jeep-pointer-group" transform="translate(400, 390) rotate(0)">
+                                <!-- Agulha reduzida 20% -->
+                                <polygon points="-8,-11.2 8,-11.2 0,-256" fill="#cc2222" stroke="#8a1a1a" stroke-width="1.6" />
+                                <!-- Base do ponteiro (tamanho original, raio 36 e 14) para encaixar no círculo preto -->
                                 <circle cx="0" cy="0" r="36" fill="#cc2222" stroke="#555" stroke-width="6" />
                                 <circle cx="0" cy="0" r="14" fill="#2b2b2b" stroke="#5a4a2a" stroke-width="4" />
                             </g>
@@ -2447,12 +2450,15 @@
             function renderJeepSpeedometer(speed, odoTotal, altitude) {
                 if (!jeepPointerGroup) return;
 
+                // Ângulo de repouso: 265° (sentido horário a partir do topo)
+                // Curso total: 200° (de 265° a 465°, que equivale a 105°)
                 const speedVal = Math.min(Math.max(speed, 0), 140);
                 const frac = speedVal / 140;
                 const angleDeg = frac * 200; // 0 a 200 graus
-                const rotation = angleDeg - 90; // 0° = topo (12h)
+                const rotation = angleDeg + 262; // offset para que 0° corresponda a 265°
 
-                jeepPointerGroup.setAttribute('transform', `translate(400,400) rotate(${rotation})`);
+                // A rotação é aplicada em torno do centro (0,0) do grupo, que está em translate(400,390)
+                jeepPointerGroup.setAttribute('transform', `translate(400, 352) rotate(${rotation})`);
 
                 const odoStr = String(Math.floor(odoTotal || 0)).padStart(6, '0');
                 if (jeepOdoDisplay) jeepOdoDisplay.textContent = odoStr;
