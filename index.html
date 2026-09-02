@@ -589,7 +589,7 @@
             font-size: 1rem;
             fill: var(--text-secondary);
         }
-        /* Jeep Willys - imagem + ponteiro SVG + overlay */
+        /* Jeep Willys Branco - imagem + ponteiro SVG + overlay */
         #full-jeep {
             max-width: 600px;
             width: 100%;
@@ -640,6 +640,65 @@
             margin-top: 2px;
         }
         #full-jeep img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 40px;
+            background: #0f0f0f;
+            z-index: 1;
+            position: relative;
+        }
+        /* Jeep Willys Preto - mesma estrutura, imagem preta */
+        #full-jeep-preto {
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            margin: 0 auto;
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+        #full-jeep-preto .jeep-pointer-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        #full-jeep-preto .jeep-pointer-wrapper svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        #full-jeep-preto .jeep-overlay-data {
+            position: absolute;
+            bottom: 6%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #f0e6c0;
+            font-family: 'Roboto Condensed', sans-serif;
+            text-align: center;
+            z-index: 5;
+            width: 70%;
+            background: rgba(0, 0, 0, 0.55);
+            padding: 6px 0 8px;
+            border-radius: 10px;
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        #full-jeep-preto .jeep-overlay-data .jeep-odo-display {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+        }
+        #full-jeep-preto .jeep-overlay-data .jeep-altitude-display {
+            font-size: 1rem;
+            color: #aaa;
+            text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+            margin-top: 2px;
+        }
+        #full-jeep-preto img {
             width: 100%;
             height: auto;
             display: block;
@@ -1716,14 +1775,17 @@
             #full-analog .analog-odo .altitude-value {
                 font-size: 0.8rem;
             }
-            #full-jeep .jeep-overlay-data .jeep-odo-display {
+            #full-jeep .jeep-overlay-data .jeep-odo-display,
+            #full-jeep-preto .jeep-overlay-data .jeep-odo-display {
                 font-size: 1.8rem;
                 letter-spacing: 2px;
             }
-            #full-jeep .jeep-overlay-data .jeep-altitude-display {
+            #full-jeep .jeep-overlay-data .jeep-altitude-display,
+            #full-jeep-preto .jeep-overlay-data .jeep-altitude-display {
                 font-size: 0.8rem;
             }
-            #full-jeep .jeep-overlay-data {
+            #full-jeep .jeep-overlay-data,
+            #full-jeep-preto .jeep-overlay-data {
                 bottom: 4%;
                 width: 80%;
                 padding: 4px 0 6px;
@@ -1906,7 +1968,8 @@
                 <div class="style-selector">
                     <button class="style-btn active" data-style="digital" id="style-digital-btn">Digital</button>
                     <button class="style-btn" data-style="analog" id="style-analog-btn">Analógico</button>
-                    <button class="style-btn" data-style="jeep" id="style-jeep-btn">Jeep</button>
+                    <button class="style-btn" data-style="jeep" id="style-jeep-btn">Jeep Branco</button>
+                    <button class="style-btn" data-style="jeep-preto" id="style-jeep-preto-btn">Jeep Preto</button>
                 </div>
                 <!-- Container Digital -->
                 <div id="full-digital" class="full-speed-container">
@@ -1932,16 +1995,13 @@
                 <div id="full-analog" class="full-speed-container" style="display:none;">
                     <svg id="analog-svg" viewBox="0 0 400 400" width="100%" height="100%" style="max-width:600px; max-height:600px; display:block; margin:0 auto;"></svg>
                 </div>
-                <!-- Container Jeep Willys - imagem + ponteiro SVG + overlay -->
+                <!-- Container Jeep Willys Branco -->
                 <div id="full-jeep" class="full-speed-container" style="display:none;">
-                    <img src="VeloJeepBranco.jpg" alt="Velocímetro Jeep" id="jeep-bg-img" style="width:100%; height:auto; display:block; border-radius:40px; background:#0f0f0f; z-index:1; position:relative;">
+                    <img src="VeloJeepBranco.jpg" alt="Velocímetro Jeep Branco" id="jeep-bg-img" style="width:100%; height:auto; display:block; border-radius:40px; background:#0f0f0f; z-index:1; position:relative;">
                     <div class="jeep-pointer-wrapper">
                         <svg viewBox="0 0 800 800" style="width:100%; height:100%; display:block;">
-                            <!-- Ajuste de posição: translate(400, 390) para subir o ponteiro e centralizar -->
                             <g id="jeep-pointer-group" transform="translate(400, 390) rotate(0)">
-                                <!-- Agulha reduzida 20% -->
-                                <polygon points="-8,-11.2 8,-11.2 0,-256" fill="#cc2222" stroke="#8a1a1a" stroke-width="1.6" />
-                                <!-- Base do ponteiro (tamanho original, raio 36 e 14) para encaixar no círculo preto -->
+                                <polygon points="-8,-11.2 8,-11.2 -0,-256" fill="#cc2222" stroke="#8a1a1a" stroke-width="1.6" />
                                 <circle cx="0" cy="0" r="36" fill="#cc2222" stroke="#555" stroke-width="6" />
                                 <circle cx="0" cy="0" r="14" fill="#2b2b2b" stroke="#5a4a2a" stroke-width="4" />
                             </g>
@@ -1950,6 +2010,23 @@
                     <div class="jeep-overlay-data">
                         <div class="jeep-odo-display" id="jeep-odo-display">000000</div>
                         <div class="jeep-altitude-display" id="jeep-altitude-display">Alt: -- m</div>
+                    </div>
+                </div>
+                <!-- Container Jeep Willys Preto -->
+                <div id="full-jeep-preto" class="full-speed-container" style="display:none;">
+                    <img src="VeloJeepPreto.jpg" alt="Velocímetro Jeep Preto" id="jeep-preto-bg-img" style="width:100%; height:auto; display:block; border-radius:40px; background:#0f0f0f; z-index:1; position:relative;">
+                    <div class="jeep-pointer-wrapper">
+                        <svg viewBox="0 0 800 800" style="width:100%; height:100%; display:block;">
+                            <g id="jeep-preto-pointer-group" transform="translate(400, 390) rotate(0)">
+                                <polygon points="-8,-11.2 8,-11.2 -40,-256" fill="#cc2222" stroke="#8a1a1a" stroke-width="1.6" />
+                                <circle cx="0" cy="0" r="36" fill="#cc2222" stroke="#555" stroke-width="6" />
+                                <circle cx="0" cy="0" r="14" fill="#2b2b2b" stroke="#5a4a2a" stroke-width="4" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="jeep-overlay-data">
+                        <div class="jeep-odo-display" id="jeep-preto-odo-display">000000</div>
+                        <div class="jeep-altitude-display" id="jeep-preto-altitude-display">Alt: -- m</div>
                     </div>
                 </div>
                 <!-- Ações -->
@@ -2339,7 +2416,7 @@
             }, {
                 icon: 'fa-tachometer-alt',
                 title: 'Velocímetro',
-                description: 'O velocímetro digital no canto superior esquerdo mostra sua velocidade atual (km/h). Clique nele para abrir em tela cheia, onde você pode alternar entre os modos Digital, Analógico (escala até 200 km/h) e Jeep Willys (imagem com ponteiro).'
+                description: 'O velocímetro digital no canto superior esquerdo mostra sua velocidade atual (km/h). Clique nele para abrir em tela cheia, onde você pode alternar entre os modos Digital, Analógico, Jeep Branco e Jeep Preto.'
             }];
 
             // ======================== FAVORITOS ========================
@@ -2421,14 +2498,21 @@
             const styleDigitalBtn = document.getElementById('style-digital-btn');
             const styleAnalogBtn = document.getElementById('style-analog-btn');
             const styleJeepBtn = document.getElementById('style-jeep-btn');
+            const styleJeepPretoBtn = document.getElementById('style-jeep-preto-btn');
             const fullDigital = document.getElementById('full-digital');
             const fullAnalog = document.getElementById('full-analog');
             const fullJeep = document.getElementById('full-jeep');
+            const fullJeepPreto = document.getElementById('full-jeep-preto');
 
-            // Jeep DOM
+            // Jeep DOM - Branco
             const jeepPointerGroup = document.getElementById('jeep-pointer-group');
             const jeepOdoDisplay = document.getElementById('jeep-odo-display');
             const jeepAltitudeDisplay = document.getElementById('jeep-altitude-display');
+
+            // Jeep DOM - Preto
+            const jeepPretoPointerGroup = document.getElementById('jeep-preto-pointer-group');
+            const jeepPretoOdoDisplay = document.getElementById('jeep-preto-odo-display');
+            const jeepPretoAltitudeDisplay = document.getElementById('jeep-preto-altitude-display');
 
             const styleDot = document.getElementById('style-dot');
             const styleFlag = document.getElementById('style-flag');
@@ -2446,25 +2530,24 @@
                 favBadge.textContent = favorites.length;
             }
 
-            // ======================== VELOCÍMETRO JEEP WILLYS (imagem + ponteiro) ========================
-            function renderJeepSpeedometer(speed, odoTotal, altitude) {
-                if (!jeepPointerGroup) return;
+            // ======================== VELOCÍMETRO JEEP (genérico) ========================
+            function renderJeepSpeedometer(pointerGroup, odoDisplay, altDisplay, speed, odoTotal, altitude) {
+                if (!pointerGroup) return;
 
                 // Ângulo de repouso: 265° (sentido horário a partir do topo)
                 // Curso total: 200° (de 265° a 465°, que equivale a 105°)
                 const speedVal = Math.min(Math.max(speed, 0), 140);
                 const frac = speedVal / 140;
                 const angleDeg = frac * 200; // 0 a 200 graus
-                const rotation = angleDeg + 262; // offset para que 0° corresponda a 265°
+                const rotation = angleDeg + 265; // offset para que 0° corresponda a 265°
 
-                // A rotação é aplicada em torno do centro (0,0) do grupo, que está em translate(400,390)
-                jeepPointerGroup.setAttribute('transform', `translate(400, 352) rotate(${rotation})`);
+                pointerGroup.setAttribute('transform', `translate(400, 363) rotate(${rotation})`);
 
                 const odoStr = String(Math.floor(odoTotal || 0)).padStart(6, '0');
-                if (jeepOdoDisplay) jeepOdoDisplay.textContent = odoStr;
+                if (odoDisplay) odoDisplay.textContent = odoStr;
 
                 const altText = (altitude !== null && altitude !== undefined) ? `${Math.round(altitude)} m` : '-- m';
-                if (jeepAltitudeDisplay) jeepAltitudeDisplay.textContent = `Alt: ${altText}`;
+                if (altDisplay) altDisplay.textContent = `Alt: ${altText}`;
             }
 
             // ======================== VELOCÍMETRO ANALÓGICO ========================
@@ -2598,7 +2681,11 @@
                     if (fullscreenStyle === 'analog') {
                         renderAnalogSpeedometer(currentSpeed, currentAltitude);
                     } else if (fullscreenStyle === 'jeep') {
-                        renderJeepSpeedometer(currentSpeed, odoTotal, currentAltitude);
+                        renderJeepSpeedometer(jeepPointerGroup, jeepOdoDisplay, jeepAltitudeDisplay, currentSpeed,
+                            odoTotal, currentAltitude);
+                    } else if (fullscreenStyle === 'jeep-preto') {
+                        renderJeepSpeedometer(jeepPretoPointerGroup, jeepPretoOdoDisplay, jeepPretoAltitudeDisplay,
+                            currentSpeed, odoTotal, currentAltitude);
                     }
                 }
             }
@@ -2615,29 +2702,30 @@
             function toggleFullscreen() {
                 const isOpen = speedometerFullscreen.classList.toggle('open');
                 if (isOpen) {
-                    if (fullscreenStyle === 'analog') {
-                        fullDigital.style.display = 'none';
+                    // Esconde todos e mostra o estilo atual
+                    fullDigital.style.display = 'none';
+                    fullAnalog.style.display = 'none';
+                    fullJeep.style.display = 'none';
+                    fullJeepPreto.style.display = 'none';
+                    document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+
+                    if (fullscreenStyle === 'digital') {
+                        fullDigital.style.display = 'flex';
+                        styleDigitalBtn.classList.add('active');
+                    } else if (fullscreenStyle === 'analog') {
                         fullAnalog.style.display = 'flex';
-                        fullJeep.style.display = 'none';
                         styleAnalogBtn.classList.add('active');
-                        styleDigitalBtn.classList.remove('active');
-                        styleJeepBtn.classList.remove('active');
                         renderAnalogSpeedometer(currentSpeed, currentAltitude);
                     } else if (fullscreenStyle === 'jeep') {
-                        fullDigital.style.display = 'none';
-                        fullAnalog.style.display = 'none';
                         fullJeep.style.display = 'flex';
                         styleJeepBtn.classList.add('active');
-                        styleDigitalBtn.classList.remove('active');
-                        styleAnalogBtn.classList.remove('active');
-                        renderJeepSpeedometer(currentSpeed, odoTotal, currentAltitude);
-                    } else {
-                        fullDigital.style.display = 'flex';
-                        fullAnalog.style.display = 'none';
-                        fullJeep.style.display = 'none';
-                        styleDigitalBtn.classList.add('active');
-                        styleAnalogBtn.classList.remove('active');
-                        styleJeepBtn.classList.remove('active');
+                        renderJeepSpeedometer(jeepPointerGroup, jeepOdoDisplay, jeepAltitudeDisplay, currentSpeed,
+                            odoTotal, currentAltitude);
+                    } else if (fullscreenStyle === 'jeep-preto') {
+                        fullJeepPreto.style.display = 'flex';
+                        styleJeepPretoBtn.classList.add('active');
+                        renderJeepSpeedometer(jeepPretoPointerGroup, jeepPretoOdoDisplay, jeepPretoAltitudeDisplay,
+                            currentSpeed, odoTotal, currentAltitude);
                     }
                     updateSpeedometer(currentSpeed);
                 }
@@ -2662,24 +2750,30 @@
                 config.speedometerStyle = style;
                 localStorage.setItem('gps_config', JSON.stringify(config));
 
+                // Esconde todos
+                fullDigital.style.display = 'none';
+                fullAnalog.style.display = 'none';
+                fullJeep.style.display = 'none';
+                fullJeepPreto.style.display = 'none';
                 document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+
                 if (style === 'digital') {
-                    styleDigitalBtn.classList.add('active');
                     fullDigital.style.display = 'flex';
-                    fullAnalog.style.display = 'none';
-                    fullJeep.style.display = 'none';
+                    styleDigitalBtn.classList.add('active');
                 } else if (style === 'analog') {
-                    styleAnalogBtn.classList.add('active');
-                    fullDigital.style.display = 'none';
                     fullAnalog.style.display = 'flex';
-                    fullJeep.style.display = 'none';
+                    styleAnalogBtn.classList.add('active');
                     renderAnalogSpeedometer(currentSpeed, currentAltitude);
                 } else if (style === 'jeep') {
-                    styleJeepBtn.classList.add('active');
-                    fullDigital.style.display = 'none';
-                    fullAnalog.style.display = 'none';
                     fullJeep.style.display = 'flex';
-                    renderJeepSpeedometer(currentSpeed, odoTotal, currentAltitude);
+                    styleJeepBtn.classList.add('active');
+                    renderJeepSpeedometer(jeepPointerGroup, jeepOdoDisplay, jeepAltitudeDisplay, currentSpeed,
+                        odoTotal, currentAltitude);
+                } else if (style === 'jeep-preto') {
+                    fullJeepPreto.style.display = 'flex';
+                    styleJeepPretoBtn.classList.add('active');
+                    renderJeepSpeedometer(jeepPretoPointerGroup, jeepPretoOdoDisplay, jeepPretoAltitudeDisplay,
+                        currentSpeed, odoTotal, currentAltitude);
                 }
                 if (speedometerFullscreen.classList.contains('open')) {
                     updateSpeedometer(currentSpeed);
@@ -2695,6 +2789,9 @@
             styleJeepBtn.addEventListener('click', function() {
                 setFullscreenStyle('jeep');
             });
+            styleJeepPretoBtn.addEventListener('click', function() {
+                setFullscreenStyle('jeep-preto');
+            });
 
             // ======================== TEMA ========================
             function setTheme(isDark) {
@@ -2706,7 +2803,11 @@
                 if (fullscreenStyle === 'analog' && speedometerFullscreen.classList.contains('open')) {
                     renderAnalogSpeedometer(currentSpeed, currentAltitude);
                 } else if (fullscreenStyle === 'jeep' && speedometerFullscreen.classList.contains('open')) {
-                    renderJeepSpeedometer(currentSpeed, odoTotal, currentAltitude);
+                    renderJeepSpeedometer(jeepPointerGroup, jeepOdoDisplay, jeepAltitudeDisplay, currentSpeed,
+                        odoTotal, currentAltitude);
+                } else if (fullscreenStyle === 'jeep-preto' && speedometerFullscreen.classList.contains('open')) {
+                    renderJeepSpeedometer(jeepPretoPointerGroup, jeepPretoOdoDisplay, jeepPretoAltitudeDisplay,
+                        currentSpeed, odoTotal, currentAltitude);
                 }
             }
 
