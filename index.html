@@ -611,32 +611,33 @@
             height: 100%;
             display: block;
         }
+        /* Overlay do hodômetro e altímetro DENTRO do velocímetro Jeep Branco */
         #full-jeep .jeep-overlay-data {
             position: absolute;
-            bottom: 6%;
+            top: 66%;
             left: 50%;
             transform: translateX(-50%);
             color: #f0e6c0;
             font-family: 'Roboto Condensed', sans-serif;
             text-align: center;
             z-index: 5;
-            width: 70%;
-            background: rgba(0, 0, 0, 0.55);
-            padding: 6px 0 8px;
-            border-radius: 10px;
-            backdrop-filter: blur(2px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            width: 40%;
+            background: transparent;
+            padding: 0;
+            border: none;
+            pointer-events: none;
         }
         #full-jeep .jeep-overlay-data .jeep-odo-display {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            letter-spacing: 4px;
-            text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+            letter-spacing: 3px;
+            text-shadow: 0 0 6px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 1);
+            line-height: 1.1;
         }
         #full-jeep .jeep-overlay-data .jeep-altitude-display {
-            font-size: 1rem;
-            color: #aaa;
-            text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+            font-size: 0.85rem;
+            color: #d8cba0;
+            text-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
             margin-top: 2px;
         }
         #full-jeep img {
@@ -670,32 +671,33 @@
             height: 100%;
             display: block;
         }
+        /* Overlay do hodômetro e altímetro DENTRO do velocímetro Jeep Preto */
         #full-jeep-preto .jeep-overlay-data {
             position: absolute;
-            bottom: 6%;
+            top: 66%;
             left: 50%;
             transform: translateX(-50%);
             color: #f0e6c0;
             font-family: 'Roboto Condensed', sans-serif;
             text-align: center;
             z-index: 5;
-            width: 70%;
-            background: rgba(0, 0, 0, 0.55);
-            padding: 6px 0 8px;
-            border-radius: 10px;
-            backdrop-filter: blur(2px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            width: 40%;
+            background: transparent;
+            padding: 0;
+            border: none;
+            pointer-events: none;
         }
         #full-jeep-preto .jeep-overlay-data .jeep-odo-display {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            letter-spacing: 4px;
-            text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+            letter-spacing: 3px;
+            text-shadow: 0 0 6px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 1);
+            line-height: 1.1;
         }
         #full-jeep-preto .jeep-overlay-data .jeep-altitude-display {
-            font-size: 1rem;
-            color: #aaa;
-            text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+            font-size: 0.85rem;
+            color: #d8cba0;
+            text-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
             margin-top: 2px;
         }
         #full-jeep-preto img {
@@ -1777,18 +1779,17 @@
             }
             #full-jeep .jeep-overlay-data .jeep-odo-display,
             #full-jeep-preto .jeep-overlay-data .jeep-odo-display {
-                font-size: 1.8rem;
+                font-size: 1.3rem;
                 letter-spacing: 2px;
             }
             #full-jeep .jeep-overlay-data .jeep-altitude-display,
             #full-jeep-preto .jeep-overlay-data .jeep-altitude-display {
-                font-size: 0.8rem;
+                font-size: 0.7rem;
             }
             #full-jeep .jeep-overlay-data,
             #full-jeep-preto .jeep-overlay-data {
-                bottom: 4%;
-                width: 80%;
-                padding: 4px 0 6px;
+                top: 35%;
+                width: 45%;
             }
             #speedometer-fullscreen .full-actions {
                 flex-direction: column;
@@ -2000,8 +2001,8 @@
                     <img src="VeloJeepBranco.jpg" alt="Velocímetro Jeep Branco" id="jeep-bg-img" style="width:100%; height:auto; display:block; border-radius:40px; background:#0f0f0f; z-index:1; position:relative;">
                     <div class="jeep-pointer-wrapper">
                         <svg viewBox="0 0 800 800" style="width:100%; height:100%; display:block;">
-                            <g id="jeep-pointer-group" transform="translate(400, 390) rotate(0)">
-                                <polygon points="-8,-11.2 8,-11.2 -0,-256" fill="#cc2222" stroke="#8a1a1a" stroke-width="1.6" />
+                            <g id="jeep-pointer-group" transform="translate(400, 363) rotate(0)">
+                                <polygon points="-8,-11.2 8,-11.2 0,-256" fill="#cc2222" stroke="#8a1a1a" stroke-width="1.6" />
                                 <circle cx="0" cy="0" r="36" fill="#cc2222" stroke="#555" stroke-width="6" />
                                 <circle cx="0" cy="0" r="14" fill="#2b2b2b" stroke="#5a4a2a" stroke-width="4" />
                             </g>
@@ -2017,8 +2018,8 @@
                     <img src="VeloJeepPreto.jpg" alt="Velocímetro Jeep Preto" id="jeep-preto-bg-img" style="width:100%; height:auto; display:block; border-radius:40px; background:#0f0f0f; z-index:1; position:relative;">
                     <div class="jeep-pointer-wrapper">
                         <svg viewBox="0 0 800 800" style="width:100%; height:100%; display:block;">
-                            <g id="jeep-preto-pointer-group" transform="translate(400, 390) rotate(0)">
-                                <polygon points="-8,-11.2 8,-11.2 -40,-256" fill="#cc2222" stroke="#8a1a1a" stroke-width="1.6" />
+                            <g id="jeep-preto-pointer-group" transform="translate(400, 363) rotate(0)">
+                                <polygon points="-8,-11.2 8,-11.2 0,-256" fill="#cc2222" stroke="#8a1a1a" stroke-width="1.6" />
                                 <circle cx="0" cy="0" r="36" fill="#cc2222" stroke="#555" stroke-width="6" />
                                 <circle cx="0" cy="0" r="14" fill="#2b2b2b" stroke="#5a4a2a" stroke-width="4" />
                             </g>
