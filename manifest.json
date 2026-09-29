@@ -1,40 +1,31 @@
 {
   "name": "GPS Pro - Precisão Total",
   "short_name": "GPS Pro",
-  "description": "GPS, velocímetro, hodômetro, navegação, trajetórias e favoritos.",
+  "description": "Aplicativo de navegação GPS com mapa interativo, traçado de rotas, trajetória, pontos de interesse e modo off-line.",
+  "start_url": "/Gps3/",
+  "scope": "/Gps3/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f0f2f5",
+  "theme_color": "#2563eb",
   "lang": "pt-BR",
   "dir": "ltr",
-  "start_url": "./index.html",
-  "scope": "./",
-  "id": "./",
-  "display": "standalone",
-  "display_override": [
-    "window-controls-overlay",
-    "standalone"
-  ],
-  "orientation": "any",
-  "theme_color": "#2563eb",
-  "background_color": "#f0f2f5",
-  "categories": [
-    "navigation",
-    "utilities"
-  ],
-  "prefer_related_applications": false,
+  "categories": ["navigation", "travel", "utilities"],
   "icons": [
     {
-      "src": "./icon-192.png",
+      "src": "icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icon-512.png",
+      "src": "icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icon-512.png",
+      "src": "icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
